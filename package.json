@@ -1,0 +1,18 @@
+{
+  "name": "smoke-setup",
+  "description": "Basic smoke network setup using sidewinder",
+  "scripts": {
+    "clean": "hammer task clean",
+    "start": "hammer task start"
+  },
+  "dependencies": {
+    "@sinclair/smoke": "^0.8.3"
+  },
+  "devDependencies": {
+    "@sidewinder/client": "^0.14.0",
+    "@sidewinder/contract": "^0.14.0",
+    "@sidewinder/server": "^0.14.0",
+    "@sinclair/hammer": "^0.18.0",
+    "typescript": "^5.5.4"
+  }
+}
