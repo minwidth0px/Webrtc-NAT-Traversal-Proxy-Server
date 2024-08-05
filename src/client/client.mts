@@ -3,6 +3,7 @@ import { RemoteNetworkHub } from './hub.mjs'
 
 
 const client2 = new Network({ hub: new RemoteNetworkHub('ws://localhost:5001/hub') })
+//const client2 = new Network({ hub: new RemoteNetworkHub('wss://tracker.webtorrent.dev') })
 
 const input = (document.getElementById('input') as HTMLInputElement);
 const btn = (document.getElementById('btn') as HTMLButtonElement);
