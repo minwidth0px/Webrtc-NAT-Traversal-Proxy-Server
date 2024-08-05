@@ -7,7 +7,9 @@ export class RemoteNetworkHub implements Hubs.Hub {
   //readonly #client: WebSocketClient<typeof SmokeContract>
   #receiveCallback: Function
   //adress: string
-  #address: string
+  #address: string = manualAddr()
+  //sendParams  object that looks like {params: [any]}
+  #sendParams: any = {params: []}
   constructor(endpoint: string) {
     /*
     this.#client = new WebSocketClient(SmokeContract, endpoint)
@@ -17,9 +19,11 @@ export class RemoteNetworkHub implements Hubs.Hub {
       this.#onReceive(message)}
     )
     */
-    this.#address = manualAddr()
+    
     this.manualRecive()
+    
     this.#receiveCallback = () => {}
+   
   }
   public async configuration(): Promise<RTCConfiguration> {
     //return this.#client.call('configuration')
@@ -49,72 +53,48 @@ export class RemoteNetworkHub implements Hubs.Hub {
   }
 
   manualRecive(){
-    console.log("we are here")
-        //create a field for a document element with id RTCSessionDescription-offer
-        const log = document.getElementById('rtc-connection-log')
-        let connectionType = document.getElementById('type')
-        //get data-value field of the connectionType element
-        let connectionTypeValue = connectionType?.getAttribute('data-value')
-        console.log(connectionTypeValue)
-        let type = ""
-        if (connectionTypeValue === "server"){
-          type = "offer"
-        }else if (connectionTypeValue === "client"){
-          type = "answer"
-        }
-        for (let i = 0; i < 1; i++){
-          if (log !== null){
-            const div = document.createElement('div')
-            div.innerText = `receive ${type}:`
-            log.appendChild(div)
-  
-            //create textarea for user to past the message
-            const textarea = document.createElement('textarea')
-            
-            //when user pastes the message, call #onReceive
-            textarea.addEventListener('paste', (e) => {
-              e.preventDefault()
-              const text = e.clipboardData?.getData('text/plain') // Add null check using optional chaining operator
-              if (text) {
-                const message = JSON.parse(text)
-                this.#onReceive(message)
-              }
-            })
-            log.appendChild(textarea)
+    const textarea = document.getElementById('receive')
+    console.log(textarea)
+    if(textarea !== null){
+      //when user pastes the message, call #onReceive
+      textarea.addEventListener('paste', async (e) => {
+        e.preventDefault()
+        const text = e.clipboardData?.getData('text/plain') // Add null check using optional chaining operator
+        if (text) {
+          const message = JSON.parse(text)
+          //sort params array so that data.type == 'description' is first
+          message.params.sort((a: any, b: any) => {
+            if (a.data.type === 'description') return -1
+            return 1
+          })
+          //loop through the params array and call #onReceive then wait 5 ms
+          for (let i = 0; i < message.params.length; i++){
+            this.#onReceive(message.params[i])
+            await delay(5)
           }
-          type = "candidate"
+
         }
-  
+      })
+    }
   }
   manualSend(message: any){
-    const log = document.getElementById('rtc-connection-log')
-    if (message.data.type == "description" ){
-      if (message.data.description.type == "offer"){
-        if (log !== null){
-          const div = document.createElement('div')
-          div.innerText = "send offer:"
-          log.appendChild(div)
-        }
-      }
-      if (message.data.description.type == "answer"){
-        if (log !== null){
-          const div = document.createElement('div')
-          div.innerText = "send answer:"
-          log.appendChild(div)
-        }
-      }
-    }else if (message.data.type == "candidate"){
-      if (log !== null){
-        const div = document.createElement('div')
-        div.innerText = "send candidate:"
-        log.appendChild(div)
-      }
-    }
+    const log = document.getElementById('send')
+    const copy = document.getElementById('copy')
+    const qr = document.getElementById('qrcode')
+    //add the message to the sendparams object's params array
+    this.#sendParams.params.push(message)
+    const paramsString = JSON.stringify(this.#sendParams)
     if (log !== null){
-      const div = document.createElement('div')
       message.from = this.#address
-      div.innerText = JSON.stringify(message)
-      log.appendChild(div)
+      log.innerText = paramsString
+    }
+    if (qr !== null) {
+      qr.setAttribute("contents", paramsString);  
+    }
+    if (copy !== null){
+      copy.addEventListener('click', () => {
+        navigator.clipboard.writeText(paramsString)
+      })
     }
   }
 }
@@ -132,4 +112,6 @@ function manualConfig(){
 function manualAddr(){
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 }
+
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 

@@ -9,14 +9,19 @@
     <script src="https://unpkg.com/@bitjson/qr-code@1.0.2/dist/qr-code.js"></script>
     <qr-code id = "qrcode" contents=""
     style="
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     margin: 2em auto;
     background-color: #fff;"
     ></qr-code>
     <div id = "rtc-connection-log">
       rtc-connection-log
     </div>
+    <div> send:</div>
+    <button id = "copy">Copy</button>
+    <div id = "send" ></div>
+    <div> receive offer </div>
+    <textarea id = "receive" ></textarea>
     <div id = "requests">
       <div>Requests</div>
     </div>
