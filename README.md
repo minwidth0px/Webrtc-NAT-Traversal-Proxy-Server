@@ -39,4 +39,4 @@ export class FetchService {
 
 ```
 
-eg `fetch(url //....` -> `FetchService.fetch //...` You need to set `useSmoke` to true for it to work. This class is only useful after you already established a connection. If there is anything you didn't unsertand, you can open an issue, but note that this is a very WIP project and may not work easily or at all for your usecase.
+eg `fetch(url //....` -> `FetchService.fetch //...` You need to set `useSmoke` to true for it to work. This class is only useful after you already established a connection. If there is anything you didn't unsertand, you can open an issue, but note that this is a very WIP project and may not work easily or at all for your usecase. You do not need to make these changes to client.html, which just tests that the webrtc connection is created.
