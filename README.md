@@ -6,7 +6,7 @@ To install, clone this repo, and run `npm install` followed by `npm start` and v
 
 Open both the client.html page and the server html page which appaer after visiting `http://localhost:5000`. (The client html page should be opened on the device you wish to recieve to fetch data from the server). You will need a way to host the client page, for example via github pages. On the server page, a smoke network address will appear on the top. Paste that link into client.html and press send. This will start the begining of the singaling phase, which you will do manually (eventually I may add a bittorent tracker method instead as well as a qr code version).
 
-You need to manually paste the `RTCSessionDescription`s that will appear in your browser. First paste the `RTCSessionDescription` from the client to the server. Then paste the generated `RTCSessionDescription` from the server to the client. Paste at least one `RTCIceCandidate` from the server to the client and vice versa.
+You need to manually paste the `RTCSessionDescription`s that will appear in your browser. First paste the `RTCSessionDescription` from the client to the server. Then paste the generated `RTCSessionDescription` from the server to the client. Paste at least one `RTCIceCandidate` from the server to the client and vice versa. (These will be printed to the screen on both ends.)
 
 You will need to make some changes to your code to actually use this for anything. Specifically, you will need to repalce all uses of fetch with the following class:
 
