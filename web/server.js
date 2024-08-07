@@ -3336,6 +3336,6 @@ if (urlDiv !== null) {
 }
 var qrDiv = document.getElementById("qrcode");
 if (qrDiv !== null) {
-  qrDiv.setAttribute("contents", serverUrl);
+  qrDiv.setAttribute("contents", fullUrl);
 }
 console.log({ remoteAddr });

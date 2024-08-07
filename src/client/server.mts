@@ -35,6 +35,7 @@ const requestsDiv = document.getElementById('requests')
 
 const server = network
 
+
 server.Http.listen({ port: 5000 }, async request => {
     console.log(request)
     console.log(request.url)
@@ -76,7 +77,7 @@ if (urlDiv !== null) {
 }
 const qrDiv = document.getElementById('qrcode')
 if (qrDiv !== null) {
-    qrDiv.setAttribute("contents", serverUrl);  
+    qrDiv.setAttribute("contents", fullUrl);  
 }
 
 console.log({ remoteAddr })
