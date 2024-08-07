@@ -3277,56 +3277,6 @@ function manualAddr() {
 }
 var delay2 = (ms) => new Promise((res) => setTimeout(res, ms));
 
-// src/client/hubs/fakeHub.mts
-var FakeNetworkHub = class {
-  #receiveCallback;
-  #address;
-  #isSet = false;
-  #sendParams = { params: [] };
-  #ICEParams;
-  #sendCount = 0;
-  constructor(endpoint, address, ICEParams) {
-    console.log(ICEParams);
-    ICEParams.params.sort((a, b) => {
-      if (a.data.type === "description")
-        return -1;
-      return 1;
-    });
-    this.#ICEParams = ICEParams;
-    this.#address = address;
-    this.#receiveCallback = () => {
-    };
-  }
-  async configuration() {
-    return manualConfig2();
-  }
-  async address() {
-    return this.#address;
-  }
-  async send(message) {
-    console.log(this.#ICEParams.params[this.#sendCount]);
-    this.#onReceive(this.#ICEParams.params[this.#sendCount]);
-    this.#sendCount++;
-  }
-  receive(callback) {
-    this.#receiveCallback = callback;
-  }
-  dispose() {
-  }
-  #onReceive(message) {
-    this.#receiveCallback(message);
-  }
-};
-function manualConfig2() {
-  return {
-    iceServers: [
-      {
-        urls: ["stun:stun1.l.google.com:19302", "stun:stun3.l.google.com:19302"]
-      }
-    ]
-  };
-}
-
 // src/client/client.mts
 var url = "wss://tracker.files.fm:7073";
 var ws = new WebSocket(url);
@@ -3335,6 +3285,9 @@ var client2 = new Network({ hub: new ManualHub("ws://localhost:5001/hub") });
 var input = document.getElementById("input");
 var infoHashInput = document.getElementById("info-hash");
 var btn = document.getElementById("btn");
+var getDiv = document.getElementById("get");
+var getBtn = document.getElementById("get-btn");
+var client;
 btn.addEventListener("click", async () => {
   const url2 = new URL(input.value);
   const searchParams = url2.searchParams;
@@ -3349,7 +3302,21 @@ btn.addEventListener("click", async () => {
   const remoteAddr = url2.origin;
   console.log({ remoteAddr });
   const client1 = new Network({ hub: new WebtorrentHub(ws, infoHash, peerId, remoteAddr) });
-  const client = client1;
+  client = client1;
+  networkService_default.remoteAddr = remoteAddr;
+  console.log({ input: remoteAddr });
+  const text = await client.Http.fetch([remoteAddr, "test"].join("/")).then((r) => r.text());
+  const output = document.getElementById("output");
+  getDiv.style.display = "block";
+  console.log({ text });
+  if (output !== null) {
+    const div = document.createElement("div");
+    div.innerText = text;
+    output.appendChild(div);
+  }
+});
+getBtn.addEventListener("click", async () => {
+  const remoteAddr = input.value;
   networkService_default.remoteAddr = remoteAddr;
   console.log({ input: remoteAddr });
   const text = await client.Http.fetch([remoteAddr, "test"].join("/")).then((r) => r.text());
@@ -3360,13 +3327,4 @@ btn.addEventListener("click", async () => {
     div.innerText = text;
     output.appendChild(div);
   }
-  networkService_default.useSmoke = true;
-  networkService_default.smokeClient = client;
-  console.log(client);
-  console.log(networkService_default.ICEParams);
-  const fake = new Network({ hub: new FakeNetworkHub("ws://localhost:5001/hub", networkService_default.address, networkService_default.ICEParams) });
-  const text2 = await fake.Http.fetch([remoteAddr, "test"].join("/")).then((r) => r.text());
-  console.log(fake);
-  console.log(text2);
-  console.log(JSON.stringify(client));
 });
