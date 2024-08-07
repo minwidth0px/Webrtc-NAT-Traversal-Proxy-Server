@@ -3286,7 +3286,6 @@ var input = document.getElementById("input");
 var infoHashInput = document.getElementById("info-hash");
 var btn = document.getElementById("btn");
 var getDiv = document.getElementById("get");
-var getBtn = document.getElementById("get-btn");
 var client;
 btn.addEventListener("click", async () => {
   const url2 = new URL(input.value);
@@ -3315,8 +3314,11 @@ btn.addEventListener("click", async () => {
     output.appendChild(div);
   }
 });
+
+var getBtn = document.getElementById('get-btn');
+var getInput = document.getElementById('get-input')
 getBtn.addEventListener("click", async () => {
-  const remoteAddr = input.value;
+  const remoteAddr = getInput.value;
   networkService_default.remoteAddr = remoteAddr;
   console.log({ input: remoteAddr });
   const text = await client.Http.fetch([remoteAddr, "test"].join("/")).then((r) => r.text());

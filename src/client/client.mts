@@ -19,7 +19,6 @@ const input = (document.getElementById('input') as HTMLInputElement);
 const infoHashInput = (document.getElementById('info-hash') as HTMLInputElement);
 const btn = (document.getElementById('btn') as HTMLButtonElement);
 const getDiv = (document.getElementById('get') as HTMLDivElement);
-const getBtn = (document.getElementById('get-btn') as HTMLButtonElement);
 let client: Network;
 btn.addEventListener( "click" , async () => {
     //check if remoteAddr is a url that contains infohash as a query parameter
@@ -64,8 +63,10 @@ btn.addEventListener( "click" , async () => {
     */
 });
 
+const getBtn = (document.getElementById('get-btn') as HTMLButtonElement);
+const getInput = (document.getElementById('get-input') as HTMLInputElement);
 getBtn.addEventListener( "click" , async () => {
-    const remoteAddr = input.value;
+    const remoteAddr = getInput.value;
     networkService.remoteAddr = remoteAddr;
     console.log({ input: remoteAddr });
     const text = await client.Http.fetch([remoteAddr, "test"].join("/")).then(r => r.text());
