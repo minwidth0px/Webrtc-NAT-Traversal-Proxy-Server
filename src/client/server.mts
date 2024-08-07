@@ -3,13 +3,15 @@ import { WebtorrentHub } from './hubs/webtorrentHub.mts'
 import { ManualHub } from './hubs/manualHub.mts'
 
 //const url = 'wss://tracker.openwebtorrent.com';
-//const url = 'ws://localhost:8000';
+const url = 'ws://localhost:8000';
 //const url = 'wss://tracker.webtorrent.dev';//<-- does not work
-const url = 'wss://tracker.files.fm:7073'  
+//const url = 'wss://tracker.files.fm:7073'  
 
 const ws = new WebSocket(url)
 
-const infoHash = window.crypto.getRandomValues(new Uint32Array(2)).join('')
+///you could make these the same which would make 
+///sending the info_hash and peer_id to the client easier
+const infoHash = window.crypto.randomUUID().replaceAll('-', '').slice(0, 20)
 const peerId = window.crypto.randomUUID().replaceAll('-', '').slice(0, 20)
 
 ws.onopen = () => {

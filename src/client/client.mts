@@ -2,11 +2,12 @@ import { Network } from '@sinclair/smoke'
 import { WebtorrentHub } from './hubs/webtorrentHub.mts'
 import { ManualHub } from './hubs/manualHub.mts'
 import networkService from './networkService.mts'
+import { FakeNetworkHub } from './hubs/fakeHub.mts'
 
 //const url = 'wss://tracker.openwebtorrent.com';
-//const url = 'ws://localhost:8000';
+const url = 'ws://localhost:8000';
 //const url = 'wss://tracker.webtorrent.dev'; //<-- does not work
-const url = 'wss://tracker.files.fm:7073'
+//const url = 'wss://tracker.files.fm:7073'
 
 const ws = new WebSocket(url)
 
@@ -44,6 +45,15 @@ btn.addEventListener( "click" , async () => {
         const div = document.createElement('div')
         div.innerText = text
         output.appendChild(div)
-    }
+    }    
+    networkService.useSmoke = true
+    networkService.smokeClient = client
+    console.log(client)
+    console.log(networkService.ICEParams)
+    const fake = new Network({ hub: new FakeNetworkHub('ws://localhost:5001/hub', networkService.address, networkService.ICEParams) })
+    const text2 = await fake.Http.fetch([remoteAddr, "test"].join("/")).then(r => r.text());
+    console.log(fake)
+    console.log(text2);
+    console.log(JSON.stringify(client))
 });
 
