@@ -5,9 +5,9 @@ import networkService from './networkService.mts'
 import { FakeNetworkHub } from './hubs/fakeHub.mts'
 
 //const url = 'wss://tracker.openwebtorrent.com';
-const url = 'ws://localhost:8000';
+//const url = 'ws://localhost:8000';
 //const url = 'wss://tracker.webtorrent.dev'; //<-- does not work
-//const url = 'wss://tracker.files.fm:7073'
+const url = 'wss://tracker.files.fm:7073'
 
 const ws = new WebSocket(url)
 

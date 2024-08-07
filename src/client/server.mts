@@ -3,9 +3,9 @@ import { WebtorrentHub } from './hubs/webtorrentHub.mts'
 import { ManualHub } from './hubs/manualHub.mts'
 
 //const url = 'wss://tracker.openwebtorrent.com';
-const url = 'ws://localhost:8000';
+//const url = 'ws://localhost:8000';
 //const url = 'wss://tracker.webtorrent.dev';//<-- does not work
-//const url = 'wss://tracker.files.fm:7073'  
+const url = 'wss://tracker.files.fm:7073'  
 
 const ws = new WebSocket(url)
 
