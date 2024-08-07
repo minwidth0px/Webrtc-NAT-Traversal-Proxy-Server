@@ -10,33 +10,28 @@ You will need to make some changes to your code to actually use this for anythin
 
 ```ts
 
-import { Network } from '@sinclair/smoke';
-import { RemoteNetworkHub } from './hub.mjs';
+import { Network } from '@sinclair/smoke'
 
-export class FetchService {
-    useSmoke: boolean;
-    private smokeClient?: Network;
-
-    constructor( hubUrl = 'ws://localhost:5001/hub') {
-        this.useSmoke = false;
-        this.smokeClient = new Network({ 
-            hub: new RemoteNetworkHub(hubUrl) 
-        });
-    }
+export default  {
+    remoteAddr: '',
+    address: '',
+    ICEParams: {params: []},
+    useSmoke: false,
+    smokeClient: null as Network | null,
 
    async fetch(url:string, options?: RequestInit): Promise<Response>{
         
          if(this.useSmoke && this.smokeClient){
-            return await this.smokeClient.Http.fetch(url,options);
+            return await this.smokeClient.Http.fetch(url,options)
           }
           else{
-              return await fetch(url,options);
+              return await fetch(url,options)
            }
       }
 }
 
 ```
 
-eg `fetch(url //....` -> `FetchService.fetch //...` You need to set `useSmoke` to true for it to work. This class is only useful after you already established a connection. If there is anything you didn't unsertand, you can open an issue, but note that this is a very WIP project and may not work easily or at all for your usecase. You do not need to make these changes to client.html, which just tests that the webrtc connection is created.
+eg `fetch(url //....` -> `FetchService.fetch //...` You need to set the smokeClient to a smoke `Network` (see client.mts or server.mts for an example) and set `useSmoke` to true for it to work. This class is only useful after you already established a connection. If there is anything you didn't unsertand, you can open an issue, but note that this is a very WIP project and may not work easily or at all for your usecase. You do not need to make these changes to client.html, which just tests that the webrtc connection is created.
 
 You also have the option of doing the signaling manually. An example is provided in the client.html, cient.mts, server.html and server.mts files. After running the server, go to `target/client/client.js` and `target/client/server.js` and search for `4e3` and replace it with `500e3` and save both files. (This extends the timeout period from 4 seconds to 500.) You will need to manually paste the `RTCSessionDescription`s that will appear in your browser. (These will be printed to the screen on both ends.)
