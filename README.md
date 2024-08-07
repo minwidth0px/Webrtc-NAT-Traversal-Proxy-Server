@@ -13,11 +13,8 @@ You will need to make some changes to your code to actually use this for anythin
 import { Network } from '@sinclair/smoke'
 
 export default  {
-    remoteAddr: '',
-    address: '',
-    ICEParams: {params: []},
     useSmoke: false,
-    smokeClient: null as Network | null,
+    smokeClient: Network | any,
 
    async fetch(url:string, options?: RequestInit): Promise<Response>{
         
