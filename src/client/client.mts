@@ -18,6 +18,9 @@ const client2 = new Network({ hub: new ManualHub('ws://localhost:5001/hub') })
 const input = (document.getElementById('input') as HTMLInputElement);
 const infoHashInput = (document.getElementById('info-hash') as HTMLInputElement);
 const btn = (document.getElementById('btn') as HTMLButtonElement);
+const getDiv = (document.getElementById('get') as HTMLDivElement);
+const getBtn = (document.getElementById('get-btn') as HTMLButtonElement);
+let client: Network;
 btn.addEventListener( "click" , async () => {
     //check if remoteAddr is a url that contains infohash as a query parameter
     const url = new URL(input.value);
@@ -35,17 +38,20 @@ btn.addEventListener( "click" , async () => {
     const remoteAddr = url.origin;
     console.log({ remoteAddr });
     const client1 = new Network({ hub : new WebtorrentHub(ws, infoHash, peerId, remoteAddr) })
-    const client = client1;
+    client = client1;
     networkService.remoteAddr = remoteAddr;
     console.log({ input: remoteAddr });
     const text = await client.Http.fetch([remoteAddr, "test"].join("/")).then(r => r.text());
     const output = document.getElementById('output');
+    getDiv.style.display = 'block';
     console.log({ text });
     if (output !== null) {
         const div = document.createElement('div')
         div.innerText = text
         output.appendChild(div)
-    }    
+    }
+    /*
+    so far this does not work    
     networkService.useSmoke = true
     networkService.smokeClient = client
     console.log(client)
@@ -55,5 +61,20 @@ btn.addEventListener( "click" , async () => {
     console.log(fake)
     console.log(text2);
     console.log(JSON.stringify(client))
+    */
+});
+
+getBtn.addEventListener( "click" , async () => {
+    const remoteAddr = input.value;
+    networkService.remoteAddr = remoteAddr;
+    console.log({ input: remoteAddr });
+    const text = await client.Http.fetch([remoteAddr, "test"].join("/")).then(r => r.text());
+    const output = document.getElementById('output');
+    console.log({ text });
+    if (output !== null) {
+        const div = document.createElement('div')
+        div.innerText = text
+        output.appendChild(div)
+    }
 });
 
