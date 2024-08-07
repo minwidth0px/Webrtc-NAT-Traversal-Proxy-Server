@@ -3319,9 +3319,8 @@ var getBtn = document.getElementById('get-btn');
 var getInput = document.getElementById('get-input')
 getBtn.addEventListener("click", async () => {
   const remoteAddr = getInput.value;
-  networkService_default.remoteAddr = remoteAddr;
   console.log({ input: remoteAddr });
-  const text = await client.Http.fetch([remoteAddr, "test"].join("/")).then((r) => r.text());
+  const text = await client.Http.fetch(remoteAddr).then((r) => r.text());
   const output = document.getElementById("output");
   console.log({ text });
   if (output !== null) {
