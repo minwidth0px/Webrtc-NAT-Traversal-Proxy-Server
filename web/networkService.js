@@ -1,5 +1,8 @@
 // src/client/networkService.mts
 var networkService_default = {
+  remoteAddr: "",
+  address: "",
+  ICEParams: { params: [] } = { params: [] },
   useSmoke: false,
   smokeClient: null,
   async fetch(url, options) {

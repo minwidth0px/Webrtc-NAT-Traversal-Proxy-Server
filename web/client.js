@@ -3328,7 +3328,7 @@ function manualConfig2() {
 }
 
 // src/client/client.mts
-var url = "ws://localhost:8000";
+var url = "wss://tracker.files.fm:7073";
 var ws = new WebSocket(url);
 var peerId = window.crypto.randomUUID().replaceAll("-", "").slice(0, 20);
 var client2 = new Network({ hub: new ManualHub("ws://localhost:5001/hub") });
