@@ -1,5 +1,5 @@
 import { Network } from '@sinclair/smoke'
-import { RemoteNetworkHub } from './hub.mjs'
+import { ManualHub } from './hubs/manualHub.mts'
 
 // ------------------------------------------------------------------
 //
@@ -7,9 +7,9 @@ import { RemoteNetworkHub } from './hub.mjs'
 //
 // ------------------------------------------------------------------
 
-const client1 = new Network({ hub: new RemoteNetworkHub('ws://localhost:5001/hub') })
+const client1 = new Network({ hub: new ManualHub('ws://localhost:5001/hub') })
 
-const client2 = new Network({ hub: new RemoteNetworkHub('ws://localhost:5001/hub') })
+const client2 = new Network({ hub: new ManualHub('ws://localhost:5001/hub') })
 
 // ------------------------------------------------------------------
 //

@@ -5,23 +5,29 @@
   </head>
   <body>
     <div id = "type" value = "client"></div>
+    <span>url</span>
     <input type="text" id="input" /> <button id = "btn">Send</button>
-    <script src="https://unpkg.com/@bitjson/qr-code@1.0.2/dist/qr-code.js"></script>
-    <qr-code id = "qrcode" contents=""
-    style="
-    width: 300px;
-    height: 300px;
-    margin: 2em auto;
-    background-color: #fff;"
-    ></qr-code>
-    <div id = "rtc-connection-log">
-      rtc-connection-log
+    <br>
+    <span>info_hash</span>
+    <input type="text" id = "info-hash">
+    <div id = "manual-connect" style="display: none;">
+      <script src="https://unpkg.com/@bitjson/qr-code@1.0.2/dist/qr-code.js"></script>
+      <qr-code id = "qrcode" contents=""
+      style="
+      width: 300px;
+      height: 300px;
+      margin: 2em auto;
+      background-color: #fff;"
+      ></qr-code>
+      <div id = "rtc-connection-log">
+        rtc-connection-log
+      </div>
+      <div> send:</div>
+      <button id = "copy">Copy</button>
+      <div id = "send" ></div>
+      <div> receive answer</div>
+      <textarea id = "receive" ></textarea>
     </div>
-    <div> send:</div>
-    <button id = "copy">Copy</button>
-    <div id = "send" ></div>
-    <div> receive answer</div>
-    <textarea id = "receive" ></textarea>
     <div id="output">
       results
     </div>

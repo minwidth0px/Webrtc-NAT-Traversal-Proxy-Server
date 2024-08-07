@@ -1,11 +1,37 @@
 import { Network } from '@sinclair/smoke'
-import { RemoteNetworkHub } from './hub.mjs'
+import { WebtorrentHub } from './hubs/webtorrentHub.mts'
+import { ManualHub } from './hubs/manualHub.mts'
 
+//const url = 'wss://tracker.openwebtorrent.com';
+//const url = 'ws://localhost:8000';
+//const url = 'wss://tracker.webtorrent.dev';//<-- does not work
+const url = 'wss://tracker.files.fm:7073'  
 
-const server = new Network({ hub: new RemoteNetworkHub('ws://localhost:5001/hub') })
-//const server = new Network({ hub: new RemoteNetworkHub('wss://tracker.webtorrent.dev') })
+const ws = new WebSocket(url)
+
+const infoHash = window.crypto.getRandomValues(new Uint32Array(2)).join('')
+const peerId = window.crypto.randomUUID().replaceAll('-', '').slice(0, 20)
+
+ws.onopen = () => {
+    console.log('connected')
+    ws.send(
+        JSON.stringify({
+            event: 'started',
+            action: "announce",
+            info_hash: infoHash,
+            peer_id: peerId,
+            numwant: 5,
+        })
+    );
+}
+
+const network = new Network({ hub: new WebtorrentHub(ws, infoHash, peerId, null) })
+
+const network2 = new Network({ hub: new ManualHub('ws://localhost:5001/hub') })
 
 const requestsDiv = document.getElementById('requests')
+
+const server = network
 
 server.Http.listen({ port: 5000 }, async request => {
     console.log(request)
@@ -38,15 +64,17 @@ server.Http.listen({ port: 5000 }, async request => {
 }) 
 
 const remoteAddr = await server.Hub.address() 
-const url = `http://${remoteAddr}:5000`
+const serverUrl = `http://${remoteAddr}:5000`
 
 const urlDiv = document.getElementById('url')
+const infoHashDiv = document.getElementById('info-hash')
+const fullUrl = `${serverUrl}/?infoHash=${infoHash}`
 if (urlDiv !== null) {
-    urlDiv.innerText = url
+    urlDiv.innerText = fullUrl
 }
 const qrDiv = document.getElementById('qrcode')
 if (qrDiv !== null) {
-    qrDiv.setAttribute("contents", url);  
+    qrDiv.setAttribute("contents", serverUrl);  
 }
 
 console.log({ remoteAddr })
