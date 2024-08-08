@@ -3108,6 +3108,11 @@ var networkService_default = {
   ICEParams: { params: [] } = { params: [] },
   useSmoke: false,
   smokeClient: null,
+  setNetwork(ws2, infoHash, peerId2, remoteAddr) {
+    this.address = peerId2;
+    const client3 = new Network({ hub: new WebtorrentHub(ws2, infoHash, peerId2, remoteAddr) });
+    this.smokeClient = client3;
+  },
   async fetch(url2, options) {
     if (this.useSmoke && this.smokeClient) {
       return await this.smokeClient.Http.fetch(url2, options);
@@ -3314,11 +3319,11 @@ btn.addEventListener("click", async () => {
     output.appendChild(div);
   }
 });
-
-var getBtn = document.getElementById('get-btn');
-var getInput = document.getElementById('get-input')
+var getBtn = document.getElementById("get-btn");
+var getInput = document.getElementById("get-input");
 getBtn.addEventListener("click", async () => {
   const remoteAddr = getInput.value;
+  networkService_default.remoteAddr = remoteAddr;
   console.log({ input: remoteAddr });
   const text = await client.Http.fetch(remoteAddr).then((r) => r.text());
   const output = document.getElementById("output");

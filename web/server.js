@@ -3108,6 +3108,11 @@ var networkService_default = {
   ICEParams: { params: [] } = { params: [] },
   useSmoke: false,
   smokeClient: null,
+  setNetwork(ws2, infoHash2, peerId2, remoteAddr2) {
+    this.address = peerId2;
+    const client = new Network({ hub: new WebtorrentHub(ws2, infoHash2, peerId2, remoteAddr2) });
+    this.smokeClient = client;
+  },
   async fetch(url2, options) {
     if (this.useSmoke && this.smokeClient) {
       return await this.smokeClient.Http.fetch(url2, options);

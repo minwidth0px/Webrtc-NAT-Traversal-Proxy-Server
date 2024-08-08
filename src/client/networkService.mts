@@ -1,4 +1,5 @@
 import { Network } from '@sinclair/smoke'
+import { WebtorrentHub } from './hubs/webtorrentHub.mts';
 
 export default  {
     remoteAddr: '',
@@ -6,12 +7,27 @@ export default  {
     //sendParams any, 
     ICEParams  : {params: []} = {params: []} as any ,
     useSmoke: false,
+    ws: WebSocket as any,
+    queue: [] as any[],
     smokeClient: null as Network | null,
+
+    setNetwork(ws: WebSocket, infoHash: string, peerId: string, remoteAddr: string ){
+        console.log("setting network")
+        this.address = peerId
+        const client = new Network({ hub : new WebtorrentHub(ws, infoHash, peerId, remoteAddr) })
+        this.smokeClient = client;
+        console.log("done setting network")
+    },
 
    async fetch(url:string, options?: RequestInit): Promise<Response>{
         
          if(this.useSmoke && this.smokeClient){
-            return await this.smokeClient.Http.fetch(url,options)
+            console.log('using smoke')
+            if(this.ws.readyState === 1){
+              return await this.smokeClient.Http.fetch(url,options)
+            }else{
+              throw new Error('socket not open. Mkae sure to use ws.addEventListener("open", ()=>{...})')
+            }
           }
           else{
               return await fetch(url,options)
