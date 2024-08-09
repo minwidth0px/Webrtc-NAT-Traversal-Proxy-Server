@@ -2652,6 +2652,7 @@ var NetSocket = class {
     this.#mutex = new Mutex();
     this.#readchannel = new Channel();
     this.#datachannel = datachannel;
+    this.#datachannel.binaryType = "arraybuffer";
     this.#datachannel.addEventListener("message", (event) => this.#onMessage(event));
     this.#datachannel.addEventListener("close", (event) => this.#onClose(event));
     this.#datachannel.addEventListener("error", (event) => this.#onError(event));
@@ -3107,15 +3108,24 @@ var networkService_default = {
   address: "",
   ICEParams: { params: [] } = { params: [] },
   useSmoke: false,
+  ws: WebSocket,
+  queue: [],
   smokeClient: null,
   setNetwork(ws, infoHash, peerId, remoteAddr) {
+    console.log("setting network");
     this.address = peerId;
     const client = new Network({ hub: new WebtorrentHub(ws, infoHash, peerId, remoteAddr) });
     this.smokeClient = client;
+    console.log("done setting network");
   },
   async fetch(url, options) {
     if (this.useSmoke && this.smokeClient) {
-      return await this.smokeClient.Http.fetch(url, options);
+      console.log("using smoke");
+      if (this.ws.readyState === 1) {
+        return await this.smokeClient.Http.fetch(url, options);
+      } else {
+        throw new Error('socket not open. Mkae sure to use ws.addEventListener("open", ()=>{...})');
+      }
     } else {
       return await fetch(url, options);
     }
