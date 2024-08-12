@@ -6,7 +6,7 @@
     "start": "hammer task start"
   },
   "dependencies": {
-    "@sinclair/smoke": "^0.8.3"
+    "@sinclair/smoke": "^0.8.4"
   },
   "devDependencies": {
     "@sidewinder/client": "^0.14.0",
