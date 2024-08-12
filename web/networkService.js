@@ -2859,6 +2859,7 @@ var WebRtcModule = class {
     const open = new Deferred();
     const peer = await this.#resolvePeer(await this.#resolveAddress(remoteAddress));
     const datachannel = peer.connection.createDataChannel(port.toString(), { ordered: true, maxRetransmits: 16 });
+    datachannel.binaryType = "arraybuffer";
     datachannel.addEventListener("open", () => {
       peer.datachannels.add(datachannel);
       open.resolve([peer, datachannel]);
@@ -2868,7 +2869,7 @@ var WebRtcModule = class {
     });
     setTimeout(() => {
       open.reject(new Error(`Connection to '${remoteAddress}:${port}' timed out`));
-    }, 4e3);
+    }, 10e3);
     return await open.promise();
   }
   async addTrack(remoteAddress, track, ...streams) {
@@ -3189,15 +3190,18 @@ var networkService_default = {
     this.address = peerId;
     const client = new Network({ hub: new WebtorrentHub(ws, infoHash, peerId, remoteAddr) });
     this.smokeClient = client;
+    this.remoteAddr = remoteAddr;
+    this.ws = ws;
     console.log("done setting network");
   },
   async fetch(url, options) {
     if (this.useSmoke && this.smokeClient) {
       console.log("using smoke");
+      console.log("ws ready state: " + this.ws.readyState);
       if (this.ws.readyState === 1) {
         return await this.smokeClient.Http.fetch(url, options);
       } else {
-        throw new Error('socket not open. Mkae sure to use ws.addEventListener("open", ()=>{...})');
+        throw new Error('socket not open. Make sure to use ws.addEventListener("open", ()=>{...})');
       }
     } else {
       return await fetch(url, options);

@@ -16,21 +16,22 @@ export default  {
         this.address = peerId
         const client = new Network({ hub : new WebtorrentHub(ws, infoHash, peerId, remoteAddr) })
         this.smokeClient = client;
+        this.remoteAddr = remoteAddr;
         console.log("done setting network")
     },
 
    async fetch(url:string, options?: RequestInit): Promise<Response>{
-        
-         if(this.useSmoke && this.smokeClient){
-            console.log('using smoke')
-            if(this.ws.readyState === 1){
-              return await this.smokeClient.Http.fetch(url,options)
-            }else{
-              throw new Error('socket not open. Mkae sure to use ws.addEventListener("open", ()=>{...})')
-            }
-          }
-          else{
-              return await fetch(url,options)
-           }
+    if(this.useSmoke && this.smokeClient){
+      console.log('using smoke')
+      console.log({ws: this.ws.readyState})
+      if(this.ws.readyState === 1){
+        return await this.smokeClient.Http.fetch(url,options)
+      }else{
+        throw new Error('socket not open. Mkae sure to use ws.addEventListener("open", ()=>{...})')
       }
+    }
+    else{
+        return await fetch(url,options)
+      }
+  }
 }

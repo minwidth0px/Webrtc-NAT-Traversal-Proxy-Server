@@ -3116,6 +3116,7 @@ var networkService_default = {
     this.address = peerId;
     const client = new Network({ hub: new WebtorrentHub(ws, infoHash, peerId, remoteAddr) });
     this.smokeClient = client;
+    this.remoteAddr = remoteAddr;
     console.log("done setting network");
   },
   async fetch(url, options) {
