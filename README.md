@@ -1,4 +1,4 @@
-WIP WebRTC-NAT-Traversal-Proxy-Server using https://github.com/sinclairzx81/smoke/. A test page can be found here: https://minwidth0px.github.io/Webrtc-NAT-Traversal-Proxy-Server.
+WIP WebRTC-NAT-Traversal-Proxy-Server using https://github.com/sinclairzx81/smoke/. A test page can be found here: https://minwidth0px.github.io/Webrtc-NAT-Traversal-Proxy-Server. Works best on chrome. Also works on Firefox desktop to some degree.
 
 The server runs as a web page in your browser and forwards all requests to localhost:8080 where your real server should be running. It allows you to host a website through NAT (as long as your router is not using [Symmetric NAT](https://en.wikipedia.org/wiki/Network_address_translation#Symmetric_NAT)).
 
