@@ -17,6 +17,7 @@ export default  {
         const client = new Network({ hub : new WebtorrentHub(ws, infoHash, peerId, remoteAddr) })
         this.smokeClient = client;
         this.remoteAddr = remoteAddr;
+        this.ws = ws;
         console.log("done setting network")
     },
 

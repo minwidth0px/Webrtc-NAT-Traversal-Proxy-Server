@@ -35,7 +35,6 @@ const requestsDiv = document.getElementById('requests')
 
 const server = network
 
-
 server.Http.listen({ port: 5000 }, async request => {
     console.log(request)
     console.log(request.url)
@@ -55,6 +54,7 @@ server.Http.listen({ port: 5000 }, async request => {
     console.log(request.signal)
     if (request.method === 'POST') {
         body = await request.text()
+        console.log({ body })
         signal = request.signal
     }
     const res = await fetch(`http://localhost:8080${path}`, {
