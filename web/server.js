@@ -3334,6 +3334,7 @@ var delay2 = (ms) => new Promise((res) => setTimeout(res, ms));
 
 // src/client/server.mts
 var url = "wss://tracker.files.fm:7073";
+url = "wss://tracker.openwebtorrent.com";
 var ws = new WebSocket(url);
 var infoHash = window.crypto.randomUUID().replaceAll("-", "").slice(0, 20);
 var peerId = window.crypto.randomUUID().replaceAll("-", "").slice(0, 20);
