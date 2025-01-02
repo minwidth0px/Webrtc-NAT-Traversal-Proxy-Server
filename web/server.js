@@ -2969,6 +2969,7 @@ var WebRtcModule = class {
     }
   }
   #onHubMessage(message) {
+    console.log("message", message)
     const data = message.data;
     switch (data.type) {
       case "description":
